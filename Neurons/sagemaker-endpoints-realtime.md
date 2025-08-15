@@ -45,13 +45,12 @@ SageMaker Endpoints는 ML 모델을 RESTful API로 배포하여 24/7 always-on �
 
 **정답: C) Amazon SageMaker Endpoints**
 
-<!-- 
+
 💡 추가 설명:
 • SageMaker Batch Transform - 대량 배치 처리 전용, 실시간 처리 불가
 • AWS Lambda - Cold Start 이슈(수초 지연)로 실시간 추론 부적합  
 • SageMaker Neo - 엣지/모바일 디바이스용 모델 최적화 도구
 • AWS Batch - 대규모 배치 작업용 서비스, 스케줄 기반 실행
--->
 
 ## 🏷️ 태그
 `#service:sagemaker-endpoints` `#constraint:real-time` `#deployment:always-on` `#latency:milliseconds` `#usecase:customer-churn`
