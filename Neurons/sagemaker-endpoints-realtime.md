@@ -1,5 +1,5 @@
 ---
-title: sagemaker-endpoints-realtime-inference-always-on-milliseconds
+title: sagemaker-endpoints-realtime-churn-prediction-deployment
 created: 2025-08-15
 modified: 2025-08-15
 tags:
@@ -8,7 +8,7 @@ tags:
 - deployment/always-on
 - latency/milliseconds
 - usecase/customer-churn
-aliases: ["SageMaker Endpoints", "실시간 ML 추론", "Customer Churn 예측"]
+aliases: ["sagemaker endpoints", "real-time inference", "실시간 추론", "customer churn"]
 ---
 
 # SageMaker Endpoints - 실시간 Customer Churn 예측 배포
@@ -30,6 +30,7 @@ SageMaker Endpoints는 ML 모델을 RESTful API로 배포하여 24/7 always-on �
 ```
 
 ### Trade-offs 고려사항
+
 **SageMaker Endpoints 장점**:
 - 밀리초 단위 저지연 실시간 응답
 - Auto Scaling을 통한 고가용성
@@ -76,7 +77,7 @@ SageMaker Endpoints는 ML 모델을 RESTful API로 배포하여 24/7 always-on �
 **정답: C) Amazon SageMaker Endpoints**
 
 💡 추가 설명:
-- **A) SageMaker Batch Transform** - 대량 데이터 배치 처리 전용으로 실시간 처리 불가
-- **B) AWS Lambda** - Cold Start 이슈(수초 지연)로 실시간 추론에 부적합
-- **D) SageMaker Neo** - 엣지/모바일 디바이스용 모델 최적화 도구, 배포 서비스 아님
-- **E) AWS Batch** - 대규모 배치 작업 처리용 서비스로 스케줄 기반 실행
+- **SageMaker Batch Transform** - 대량 데이터 배치 처리 전용으로 실시간 처리 불가
+- **AWS Lambda** - Cold Start 이슈(수초 지연)로 실시간 추론에 부적합
+- **SageMaker Neo** - 엣지/모바일 디바이스용 모델 최적화 도구, 배포 서비스 아님
+- **AWS Batch** - 대규모 배치 작업 처리용 서비스로 스케줄 기반 실행

@@ -1,18 +1,14 @@
 ---
-title: sagemaker-overfitting-l1-l2-regularization
+title: sagemaker-regularization-overfitting-parameter-tuning
 created: 2025-08-15
 modified: 2025-08-15
 tags:
-  - service/sagemaker
-  - technique/regularization
-  - problem/overfitting
-  - parameter/dropout
-  - parameter/l1-l2-regularization
-aliases:
-  - SageMaker 오버피팅
-  - 정규화 파라미터
-  - 드롭아웃 조정
-  - L1L2 정규화
+- service/sagemaker
+- technique/regularization
+- problem/overfitting
+- parameter/hyperparameter-tuning
+- ml/model-optimization
+aliases: ["regularization", "overfitting", "파라미터 조정", "hyperparameter tuning"]
 ---
 
 # SageMaker에서 오버피팅 해결을 위한 Regularization 파라미터 조정
@@ -73,19 +69,19 @@ Training Data → Model Training → Validation
 
 ## 📝 관련 문제
 
-**Question:** SageMaker에서 모델 훈련 중 오버피팅을 해결하기 위한 적절한 접근 방법은?
+**Question:** A machine learning engineer notices that their SageMaker model shows excellent performance on training data but poor performance on validation data. What is the most appropriate approach to address this overfitting issue?
 
 **Options:**
-- A) Dropout rate 감소
-- B) Learning rate 증가  
-- C) Regularization parameter 감소
-- D) 훈련 데이터 샘플 수 증가
-- E) 위의 모든 것이 부적절함
+- A) Decrease the dropout rate
+- B) Increase the learning rate
+- C) Decrease regularization parameters
+- D) Increase the number of training samples
+- E) Increase dropout rate or regularization parameters
 
-**정답: E) 위의 모든 것이 부적절함**
+**정답: E) Increase dropout rate or regularization parameters**
 
 💡 추가 설명:
-- **Dropout rate 감소** - 오히려 오버피팅을 악화시킴. Dropout은 증가시켜야 함
-- **Learning rate 증가** - 오버피팅 해결과 직접적 관련성이 낮으며, 훈련 불안정성 야기 가능
-- **Regularization parameter 감소** - 일반적으로 오버피팅을 악화시킴. Regularization은 증가시켜야 함  
-- **훈련 데이터 샘플 수 증가** - 도움이 되지만 항상 실현 가능하지 않으며, 근본적 해결책이 아님
+- **Decrease dropout rate** - 오히려 오버피팅을 악화시킴. Dropout은 증가시켜야 함
+- **Increase learning rate** - 오버피팅 해결과 직접적 관련성이 낮으며, 훈련 불안정성 야기 가능
+- **Decrease regularization parameters** - 일반적으로 오버피팅을 악화시킴. Regularization은 증가시켜야 함
+- **Increase training samples** - 도움이 되지만 항상 실현 가능하지 않으며, 근본적 해결책이 아님
