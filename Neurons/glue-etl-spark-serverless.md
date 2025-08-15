@@ -1,5 +1,12 @@
+--- 
+tags: 
+  - service/aws-glue 
+  - architecture/serverless-etl 
+  - engine/apache-spark 
+  - integration/multi-source 
+  - usecase/data-warehouse-etl 
+---
 # AWS Glue - 서버리스 ETL 서비스와 다양한 데이터 소스 통합
-
 ## 🎯 핵심 포인트
 다양한 데이터 소스에서 데이터를 추출하고 변환해야 하는 경우 AWS Glue에서, 서버리스 환경으로 자동 ETL 코드 생성과 Apache Spark 기반 처리를 할 수 있다.
 
@@ -76,5 +83,12 @@ AWS Glue는 완전 관리형 서버리스 ETL 서비스로, 데이터 준비와 
 • **D) AWS Data Pipeline** - EC2 인스턴스 관리가 필요하고 자동 코드 생성 기능 없음
 • **E) Amazon Kinesis Data Firehose** - 실시간 스트리밍 서비스로 배치 ETL 시나리오에 부적합
 
-## 🏷️ 태그
-#service:aws-glue `#architecture:serverless-etl` `#engine:apache-spark` `#integration:multi-source` `#usecase:data-warehouse-etl`
+	## 🏷️ 태그
+	---
+	tags:
+	 - service/aws-glue
+	 - architecture/serverless-etl
+	 - engine/apache-spark
+	 - integration/multi-source
+	 - usecase/data-warehouse-etl
+	---
