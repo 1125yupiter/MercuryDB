@@ -1,14 +1,14 @@
 	---
 	
-	aliases: ["별칭1", "별칭2", "줄임말"] tags:
-	
+	aliases: ["별칭1", "별칭2", "줄임말"] 
+	tags:
 	- category/value
 	- category/value
 	- category/value
 	- category/value
 	- category/value 
-	- created: 2024-01-15 
-	- modified: 2024-01-15
+	- created: 오늘날짜 
+	- modified: 오늘날짜
 	
 	---
 	
