@@ -1,12 +1,14 @@
 ---
 
-title: [메인태그로 주요태그-주요태그-주요태그-주요태그 이런식] created: 오늘날짜 modified: 오늘날짜 tags:
-
+title: 
+created: 오늘날짜 
+modified: 오늘날짜 
+tags:
 - category/value
 - category/value
 - category/value
 - category/value
-- category/value aliases: ["별칭1", "별칭2", "줄임말"]
+- category/value aliases: ["별칭1", "별칭2", "줄임말" 영어로만]
 
 ---
 
@@ -16,7 +18,7 @@ title: [메인태그로 주요태그-주요태그-주요태그-주요태그 이�
 
 [핵심 내용을 "~한 경우 ~에서, ~할 수 있다" 형식으로 한 문장으로 작성]
 
-## 📝 설명
+## 📝 설명 [양식 수정이 필요한경우 내용에 맞춰서 수정 가능]
 
 ### [서비스/기술]가 [사용 사례]에 적합한 이유
 
@@ -62,7 +64,7 @@ title: [메인태그로 주요태그-주요태그-주요태그-주요태그 이�
 
 ## 📝 관련 문제
 
-**Question:** [실제 시나리오 기반 문제]
+**Question:** [실제 시나리오 기반 문제, 영어로]
 
 **Options:**
 
