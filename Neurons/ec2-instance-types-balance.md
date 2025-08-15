@@ -35,7 +35,7 @@ AWS는 인스턴스 세대가 높을수록 더 나은 성능과 비용 효율성
 - M 시리즈는 "범용"의 대표격으로 대부분의 일반적인 애플리케이션에 적합
 - ARM 기반 Graviton2의 호환성 검토 후 도입 권장
 
-## 📝 문제
+## 📝 관련 문제
 
 **Question:**
 Which of the following instance types is best suited for workloads that require a balance of compute, memory, and network resources in Amazon EC2?

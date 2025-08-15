@@ -32,7 +32,7 @@ SageMaker Endpoints는 ML 모델을 RESTful API로 배포하여 24/7 always-on �
 - 실시간 사기 거래 탐지 및 차단
 - 개인화 추천 시스템의 실시간 컨텐츠 제공
 
-## 📝 관련 시험 문제
+## 📝 관련 문제
 
 **Question:** You have developed a machine learning model to predict customer churn for an e-commerce company, and you need to deploy the model to process new data in real-time. Which of the following AWS services would be the best fit for this use case?
 
