@@ -7,8 +7,8 @@
 ```markdown
 ---
 title: [태그-태그-태그.md 형식]
-created: 2025-08-15
-modified: 2025-08-15
+created: 오늘 날짜
+modified: 오늘 날짜
 tags:
 - category/value (5개 이상, 내용에 따라 조정)
 aliases: ["별칭1", "별칭2"] # 영어만
