@@ -4,125 +4,196 @@ const date = tp.date.now("YYYY-MM-DD");
 const time = tp.date.now("HH:mm");
 const koreanDate = tp.date.now("YYYY년 MM월 DD일");
 
-// 파일명 변경
+// 파일을 Meta/graphview-history/로 이동 및 이름 변경
+const targetFolder = "Meta/graphview-history";
 const fileName = `Graph-Analysis-${date}`;
-tp.file.rename(fileName);
+const targetPath = `${targetFolder}/${fileName}`;
 
-// 기본 데이터 수집
+// 폴더가 없으면 생성
+if (!await tp.file.exists(targetFolder)) {
+    await app.vault.createFolder(targetFolder);
+}
+
+// 파일 이동 및 이름 변경
+await tp.file.move(targetPath);
+
+// Neurons 폴더의 파일만 수집
 const allFiles = app.vault.getMarkdownFiles();
-const totalNodes = allFiles.length;
+const neuronsFiles = allFiles.filter(f => f.path.startsWith('Neurons/'));
+const totalNodes = neuronsFiles.length;
 
-// 오늘 생성된 파일
+// 오늘 생성된 노트
 const today = new Date().toDateString();
-const newNotesToday = allFiles.filter(file => 
+const newNotesToday = neuronsFiles.filter(file => 
   new Date(file.stat.ctime).toDateString() === today
 ).length;
 
-// 링크 수 계산
+// 이번 주 생성된 노트
+const oneWeekAgo = new Date();
+oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+const newThisWeek = neuronsFiles.filter(file => 
+  new Date(file.stat.ctime) > oneWeekAgo
+).length;
+
+// 링크 분석 (Neurons 폴더 내부만)
 let totalLinks = 0;
-let totalBacklinks = 0;
-
-allFiles.forEach(file => {
-  const cache = app.metadataCache.getFileCache(file);
-  if (cache && cache.links) {
-    totalLinks += cache.links.length;
-  }
-  
-  const backlinks = app.metadataCache.getBacklinksForFile(file);
-  if (backlinks && backlinks.data) {
-    totalBacklinks += Object.keys(backlinks.data).length;
-  }
-});
-
-// 고립된 노드 계산
 let isolatedNodes = 0;
-allFiles.forEach(file => {
+let nodeConnections = new Map();
+
+neuronsFiles.forEach(file => {
   const cache = app.metadataCache.getFileCache(file);
-  const hasOutlinks = cache && cache.links && cache.links.length > 0;
-  const backlinks = app.metadataCache.getBacklinksForFile(file);
-  const hasBacklinks = backlinks && backlinks.data && Object.keys(backlinks.data).length > 0;
+  const outlinks = cache?.links?.length || 0;
   
-  if (!hasOutlinks && !hasBacklinks) {
+  // Neurons 폴더 내부 링크만 카운트
+  let internalOutlinks = 0;
+  if (cache && cache.links) {
+    cache.links.forEach(link => {
+      const linkedFile = app.metadataCache.getFirstLinkpathDest(link.link, file.path);
+      if (linkedFile && linkedFile.path.startsWith('Neurons/')) {
+        internalOutlinks++;
+      }
+    });
+  }
+  
+  // 백링크 계산 (Neurons 내부만)
+  const backlinks = app.metadataCache.getBacklinksForFile(file);
+  let internalBacklinks = 0;
+  if (backlinks && backlinks.data) {
+    Object.keys(backlinks.data).forEach(linkPath => {
+      if (linkPath.startsWith('Neurons/')) {
+        internalBacklinks++;
+      }
+    });
+  }
+  
+  const totalConn = internalOutlinks + internalBacklinks;
+  totalLinks += internalOutlinks;
+  
+  // 고립된 노드 체크
+  if (totalConn === 0) {
     isolatedNodes++;
   }
+  
+  // 허브 노드 데이터 수집
+  nodeConnections.set(file.basename, totalConn);
 });
 
-// 폴더별 분석
-const neuronsFiles = allFiles.filter(f => f.path.startsWith('Neurons/')).length;
-const metaFiles = allFiles.filter(f => f.path.startsWith('Meta/')).length;
-const otherFiles = totalNodes - neuronsFiles - metaFiles;
+// Top 5 허브 노드
+const hubNodes = Array.from(nodeConnections.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
 
-// 계산된 지표들
-const avgConnections = totalNodes > 0 ? (totalLinks / totalNodes).toFixed(2) : "0";
-const connectionDensity = totalNodes > 0 ? ((totalLinks * 2) / totalNodes).toFixed(3) : "0";
-const networkActivity = totalNodes > 0 ? (((totalNodes - isolatedNodes) / totalNodes) * 100).toFixed(1) : "0";
-const neuronsPercent = totalNodes > 0 ? ((neuronsFiles / totalNodes) * 100).toFixed(1) : "0";
-const metaPercent = totalNodes > 0 ? ((metaFiles / totalNodes) * 100).toFixed(1) : "0";
-const otherPercent = totalNodes > 0 ? ((otherFiles / totalNodes) * 100).toFixed(1) : "0";
+// 태그 분석 (Neurons 폴더만)
+let tagsMap = new Map();
+neuronsFiles.forEach(file => {
+    const cache = app.metadataCache.getFileCache(file);
+    if (cache && cache.tags) {
+        cache.tags.forEach(tag => {
+            tagsMap.set(tag.tag, (tagsMap.get(tag.tag) || 0) + 1);
+        });
+    }
+});
 
-// 네트워크 유형 판단
-let networkType = "분산형 네트워크";
-if (isolatedNodes < totalNodes * 0.2) {
-  networkType = "잘 연결된 네트워크";
+const topTags = Array.from(tagsMap.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
+const totalTags = tagsMap.size;
+
+// 핵심 지표 계산
+const avgConnections = totalNodes > 0 ? (totalLinks / totalNodes).toFixed(1) : "0";
+const isolationRate = totalNodes > 0 ? ((isolatedNodes / totalNodes) * 100).toFixed(1) : "0";
+const connectionRate = totalNodes > 0 ? (((totalNodes - isolatedNodes) / totalNodes) * 100).toFixed(1) : "0";
+
+// 성장률 계산 (30일 기준)
+const thirtyDaysAgo = new Date();
+thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+const oldNodes = neuronsFiles.filter(file => 
+    new Date(file.stat.ctime) < thirtyDaysAgo
+).length;
+const monthlyGrowth = oldNodes > 0 ? 
+    (((totalNodes - oldNodes) / oldNodes) * 100).toFixed(1) : "새로운 Vault";
+
+// 네트워크 상태 판단
+let networkStatus = "🟢 건강";
+let statusColor = "green";
+if (isolationRate > 50) {
+  networkStatus = "🔴 연결 부족";
+  statusColor = "red";
+} else if (isolationRate > 30) {
+  networkStatus = "🟡 개선 필요";
+  statusColor = "yellow";
 }
 
-// 연결 패턴 판단
-let connectionPattern = "선형적 연결 구조";
-if (avgConnections > 2) {
-  connectionPattern = "활발한 상호참조";
+// 성장 추세
+let growthTrend = "📈 성장중";
+if (newThisWeek === 0) {
+  growthTrend = "📉 정체";
+} else if (newThisWeek > 10) {
+  growthTrend = "🚀 급성장";
 }
 
-// 성장 단계 판단
-let growthStage = "성숙한 네트워크";
-if (totalNodes < 100) {
-  growthStage = "초기 구축";
-} else if (totalNodes < 500) {
-  growthStage = "활성 성장";
+// 허브 노드 텍스트
+let hubText = "";
+if (hubNodes.length > 0) {
+  hubNodes.forEach((node, index) => {
+    if (node[1] > 0) {
+      hubText += `${index + 1}. **[[${node[0]}]]** - ${node[1]}개 연결\n`;
+    }
+  });
+} else {
+  hubText = "*아직 연결된 노트가 없습니다*\n";
+}
+
+// 태그 텍스트
+let tagText = "";
+if (topTags.length > 0) {
+  tagText = topTags.map(tag => `\`${tag[0]}\` (${tag[1]})`).join(" • ");
+} else {
+  tagText = "*태그가 사용되지 않았습니다*";
+}
+
+// 개선 제안
+let suggestions = [];
+if (isolationRate > 30) {
+  suggestions.push(`💡 ${isolatedNodes}개의 고립된 노트를 다른 노트와 연결해보세요`);
+}
+if (avgConnections < 2) {
+  suggestions.push("💡 노트 간 상호 참조를 늘려 지식 네트워크를 강화하세요");
+}
+if (totalTags < totalNodes * 0.5) {
+  suggestions.push("💡 태그를 활용해 노트를 체계적으로 분류해보세요");
+}
+if (newThisWeek === 0) {
+  suggestions.push("💡 새로운 인사이트를 기록해 네트워크를 확장해보세요");
+}
+if (suggestions.length === 0) {
+  suggestions.push("✨ 네트워크가 건강하게 성장하고 있습니다!");
 }
 -%>
+# 📊 Neurons 그래프 분석 - <% koreanDate %>
 
-# 📈 그래프 분석 리포트 - <% koreanDate %>
+## 🎯 현재 상태: <% networkStatus %>
 
-## 📊 핵심 지표 대시보드
+### 📈 핵심 지표
+| 지표 | 값 | 변화 |
+|------|-----|------|
+| **총 노트** | <% totalNodes %>개 | <% growthTrend %> |
+| **총 링크** | <% totalLinks %>개 | 평균 <% avgConnections %>개/노트 |
+| **연결률** | <% connectionRate %>% | <% isolatedNodes %>개 고립 |
+| **이번 주 신규** | <% newThisWeek %>개 | 오늘 +<% newNotesToday %> |
 
-### 🔗 연결성 분석
-- **총 노드 수**: <% totalNodes %>개 *전체 노트 파일의 개수*
-- **총 링크 수**: <% totalLinks %>개 *노트 간 연결된 링크의 총합*
-- **총 백링크**: <% totalBacklinks %>개 *다른 노트에서 참조되는 링크*
-- **평균 연결도**: <% avgConnections %> *노드당 평균 링크 수*
+### 🏆 가장 연결이 많은 노트
+<% hubText %>
 
-### 🏝️ 네트워크 건강도
-- **고립된 노드**: <% isolatedNodes %>개 *연결이 없는 독립적인 노트*
-- **연결 밀도**: <% connectionDensity %> *전체 네트워크의 연결 정도*
-- **네트워크 활성도**: <% networkActivity %>% *연결된 노드의 비율*
+### 🏷️ 주요 태그
+<% tagText %>
 
-### 📈 성장 지표
-- **오늘 신규 노트**: <% newNotesToday %>개 *오늘 생성된 새로운 노트*
+## 💡 개선 제안
+<% suggestions.join("\n") %>
 
-## 📁 구조별 분석
-
-### 폴더 분포
-- **🧠 Neurons 폴더**: <% neuronsFiles %>개 노트 *(<% neuronsPercent %>%)*
-- **🔧 Meta 폴더**: <% metaFiles %>개 노트 *(<% metaPercent %>%)*
-- **📂 기타 폴더**: <% otherFiles %>개 노트 *(<% otherPercent %>%)*
-
-## 📸 시각적 분석
+## 📸 네트워크 시각화
 ![[graph-<% date %>.png]]
-*그래프 구조의 스냅샷 - <% time %> 기준*
-
-## 🔍 인사이트 & 관찰사항
-
-### 자동 분석 결과
-- **네트워크 유형**: <% networkType %>
-- **연결 패턴**: <% connectionPattern %>
-- **성장 단계**: <% growthStage %>
-
-### 📝 수동 관찰사항
-- 
-
-### 💡 개선 제안
-- 현재 네트워크 상태를 바탕으로 한 맞춤형 개선안을 작성해보세요
+*<% time %> 기준 스냅샷*
 
 ---
-**분석 완료 시간**: <% koreanDate %> <% time %>  
-**총 노드**: <% totalNodes %> | **총 링크**: <% totalLinks %> | **연결 밀도**: <% connectionDensity %>
+> 📅 **<% koreanDate %>** | 🧠 **Neurons**: <% totalNodes %>개 | 🔗 **Links**: <% totalLinks %>개 | 📈 **월간 성장**: <% monthlyGrowth %>%
