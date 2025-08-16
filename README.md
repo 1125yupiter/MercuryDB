@@ -1,5 +1,7 @@
 # MercuryDB 🧠
 
+![Status](https://img.shields.io/badge/status-active%20development-green) ![Neurons](https://img.shields.io/badge/neurons-28-blue) ![Tags](https://img.shields.io/badge/tags-120-purple) ![Network](https://img.shields.io/badge/network-100%25%20connected-brightgreen)
+
 > **ML 솔루션 설계를 위한 지식 네트워크**  
 > _"Not just organizing knowledge, but building a neural network of ML solutions"_
 
@@ -110,41 +112,44 @@ tags:
 - **Graph View**: 시각적 연결 관계 탐색
 - **Dataview 쿼리**: 복잡한 조건으로 검색
 
-### 3. Dataview 쿼리 예시
+### 3. 성장 추적
 
-```dataview
-TABLE tags, created
-FROM "Neurons"
-WHERE contains(tags, "#problem:classification")
-SORT created DESC
+Graph View History를 통해 네트워크의 일별 성장을 모니터링합니다:
+
+```yaml
+# 2025-08-16 스냅샷
+- 노트: 28개
+- 태그: 120개  
+- 시냅스: 140개 연결
+- 허브 노트: 28개
 ```
 
-## 📊 성장 추적
+`Meta/graphview-history/`에서 일별 스냅샷과 상세 로그를 확인할 수 있습니다.
 
-### Graph View History
+## 📊 현재 상태 (2025-08-16)
 
-`Meta/graphview-history/` 폴더에서 일별 성장을 확인할 수 있습니다:
+### 네트워크 규모
 
-- 일별 스냅샷 (PNG)
-- 성장 로그 (MD)
-- 주요 마일스톤 기록
+- **28개** ML 패턴 문서화 완료
+- **120개** 고유 태그로 연결
+- **100%** 네트워크 연결 (모든 뉴런이 연결됨)
+- **평균 5개** 태그 per 노트
 
-### 현재 상태 (자동 업데이트)
+### 주요 패턴 예시
 
-```dataview
-TABLE WITHOUT ID
-  "📊 총 뉴런 수" AS "메트릭",
-  length(file.lists) AS "값"
-FROM "Neurons"
-GROUP BY true
-```
+- `xgboost_multiclass_classification` - XGBoost를 활용한 다중 분류
+- `sagemaker-offline-development-docker` - 오프라인 환경에서의 SageMaker 개발
+- `clustering-kmeans-elbow-method` - K-Means 클러스터링 최적화
+- `regression-sagemaker-linearlearner-forecast` - 선형 회귀 예측 모델
+- `recommendation-personalize-realtime` - 실시간 추천 시스템
 
-```dataview
-LIST
-FROM "Neurons"
-SORT file.mtime DESC
-LIMIT 5
-```
+### 인기 태그 TOP 5
+
+1. `#service:sagemaker` (8회)
+2. `#problem:classification` (4회)
+3. `#method:supervised` (3회)
+4. `#problem:regression` (3회)
+5. `#algorithm:linear-learner` (2회)
 
 ## 💡 작성 가이드
 
@@ -270,8 +275,10 @@ graph LR
 
 **Created by**: Sehyun YU  
 **Started**: 2025-08-15  
-**Version**: 1.1.0  
-**Last Updated**: 2025-08-16
+**Version**: 1.2.0  
+**Last Updated**: 2025-08-16  
+**Current Neurons**: 28  
+**Active Tags**: 120
 
 ---
 
