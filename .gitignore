@@ -1,3 +1,4 @@
+cat > .gitignore << 'EOF'
 # 모든 파일과 폴더를 기본적으로 무시
 *
 
@@ -7,9 +8,12 @@
 !Neurons/
 !Neurons/**
 
-# .obsidian 폴더 제외
-.obsidian/
+# 맥 시스템 파일 제외
+.DS_Store
+.DS_Store?
+._*
 
 # git 관련 파일들은 추적
 !.gitignore
 !README.md
+EOF
