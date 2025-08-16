@@ -16,4 +16,5 @@ cat > .gitignore << 'EOF'
 # git 관련 파일들은 추적
 !.gitignore
 !README.md
-EOF
+EOF.obsidian/
+.obsidian/
