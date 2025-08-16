@@ -1,37 +1,96 @@
 <%*
 const date = tp.date.now("YYYY-MM-DD");
 const time = tp.date.now("HH:mm");
-const folderPath = "Meta/Graph-History";
 
-// 폴더 생성
-await tp.file.create_new_folder(folderPath);
+// 현재 볼트 데이터 자동 수집
+const allFiles = app.vault.getMarkdownFiles();
+const totalNodes = allFiles.length;
 
-// 사용자 입력
-const notes = await tp.system.prompt("오늘 추가된 노트 수:");
-const connections = await tp.system.prompt("새로운 연결/발견사항:");
-const observation = await tp.system.prompt("주요 관찰사항:");
+// 오늘 생성된 파일 수
+const today = new Date().toDateString();
+const newNotesToday = allFiles.filter(file => 
+  new Date(file.stat.ctime).toDateString() === today
+).length;
 
-// 내용 생성
-const content = `# Graph Analysis ${date}
+// 전체 링크 수 계산
+let totalLinks = 0;
+let totalBacklinks = 0;
 
-## 📊 메트릭
-- **새 노트**: ${notes}개
-- **새 연결/발견**: ${connections}
-- **캡처 시간**: ${time}
+for (const file of allFiles) {
+  const cache = app.metadataCache.getFileCache(file);
+  if (cache?.links) {
+    totalLinks += cache.links.length;
+  }
+  
+  // 백링크 수
+  const backlinks = app.metadataCache.getBacklinksForFile(file);
+  if (backlinks?.data) {
+    totalBacklinks += Object.keys(backlinks.data).length;
+  }
+}
+
+// 고립된 노드 (링크가 없는 노트)
+const isolatedNodes = allFiles.filter(file => {
+  const cache = app.metadataCache.getFileCache(file);
+  const hasOutlinks = cache?.links?.length > 0;
+  const backlinks = app.metadataCache.getBacklinksForFile(file);
+  const hasBacklinks = backlinks?.data && Object.keys(backlinks.data).length > 0;
+  return !hasOutlinks && !hasBacklinks;
+}).length;
+
+// 폴더별 분석
+const neuronsFiles = allFiles.filter(f => f.path.startsWith('Neurons/')).length;
+const metaFiles = allFiles.filter(f => f.path.startsWith('Meta/')).length;
+
+// 평균 연결도
+const avgConnections = totalNodes > 0 ? (totalLinks / totalNodes).toFixed(2) : 0;
+
+// 어제 데이터와 비교 (선택사항)
+const yesterday = tp.date.now("YYYY-MM-DD", -1);
+const yesterdayLogPath = `Meta/Graph-History/graph-${yesterday}.md`;
+let growthData = "신규 분석";
+
+try {
+  const yesterdayFile = app.vault.getAbstractFileByPath(yesterdayLogPath);
+  if (yesterdayFile) {
+    const yesterdayContent = await app.vault.read(yesterdayFile);
+    const yesterdayNodes = yesterdayContent.match(/\*\*총 노드\*\*: (\d+)/);
+    if (yesterdayNodes) {
+      const nodeGrowth = totalNodes - parseInt(yesterdayNodes[1]);
+      growthData = `노드 증가: +${nodeGrowth}개`;
+    }
+  }
+} catch (e) {
+  // 어제 파일이 없으면 무시
+}
+-%>
+
+# Graph Analysis <% date %>
+
+## 📊 자동 수집 데이터
+- **총 노드 수**: <% totalNodes %>개
+- **총 링크 수**: <% totalLinks %>개
+- **총 백링크**: <% totalBacklinks %>개
+- **고립된 노드**: <% isolatedNodes %>개
+- **평균 연결도**: <% avgConnections %>
+- **오늘 신규 노트**: <% newNotesToday %>개
+
+## 📁 폴더별 분석
+- **Neurons 폴더**: <% neuronsFiles %>개 노트
+- **Meta 폴더**: <% metaFiles %>개 노트
+- **기타**: <% totalNodes - neuronsFiles - metaFiles %>개 노트
+
+## 📈 성장 분석
+- **<% growthData %>**
+- **연결 밀도**: <% ((totalLinks * 2) / totalNodes).toFixed(3) %>
+- **기록 시간**: <% time %>
 
 ## 📸 스크린샷
-![[graph-${date}.png]]
-> 스크린샷을 Meta/Graph-History/ 폴더에 저장하세요
+![[graph-<% date %>.png]]
 
-## 👀 관찰사항
-${observation}
-
-## 📝 메모
+## 📝 수동 관찰사항
 - 
 
 ---
-**Tags**: #graph-analysis #daily`;
-
-// 파일 생성
-await tp.file.create_new(content, `${folderPath}/graph-${date}`, true);
--%>
+**Tags**: #graph-analysis #auto-generated
+**Nodes**: <% totalNodes %> | **Links**: <% totalLinks %> | **Density**: <% ((totalLinks * 2) / totalNodes).toFixed(2) %>
