@@ -1,3 +1,15 @@
-.obsidian/workspace.json
-.obsidian/backups/
-.obsidian/cache/
+# 모든 파일과 폴더를 기본적으로 무시
+*
+
+# Meta와 Neurons 폴더만 추적
+!Meta/
+!Meta/**
+!Neurons/
+!Neurons/**
+
+# .obsidian 폴더 제외
+.obsidian/
+
+# git 관련 파일들은 추적
+!.gitignore
+!README.md
