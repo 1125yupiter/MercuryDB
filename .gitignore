@@ -1,20 +1,21 @@
-cat > .gitignore << 'EOF'
-# 모든 파일과 폴더를 기본적으로 무시
+# 모든 파일과 폴더 기본 무시
 *
 
-# Meta와 Neurons 폴더만 추적
+# Meta와 Neurons 폴더 추적
 !Meta/
 !Meta/**
 !Neurons/
 !Neurons/**
 
-# 맥 시스템 파일 제외
+# MacOS 파일 무시
 .DS_Store
 .DS_Store?
 ._*
 
-# git 관련 파일들은 추적
+# Git 관련 파일 추적
 !.gitignore
 !README.md
-EOF.obsidian/
+
+# Obsidian 전체 무시, 하지만 특정 플러그인만 추적
 .obsidian/
+!.obsidian/plugins/quickadd/main.js
