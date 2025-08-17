@@ -1,34 +1,34 @@
 ---
-title: anomaly-kinesis-flink-realtime
+title: anomaly-kinesis-analytics-realtime
 created: 2025-08-17
 modified: 2025-08-17
 tags:
   - problem/fraud-detection
   - service/kinesis-data-streams
-  - service/apache-flink
+  - service/kinesis-data-analytics
   - constraint/real-time
   - technique/random-cut-forest
-aliases: ["fraud-detection-streaming", "real-time-anomaly", "rcf-flink"]
+aliases: ["fraud-detection-streaming", "real-time-anomaly", "rcf-kinesis"]
 ---
 
-# 실시간 사기 거래 탐지를 위한 Kinesis와 Apache Flink 아키텍처
+# 실시간 사기 거래 탐지를 위한 Kinesis Data Analytics 아키텍처
 
 ## 🎯 핵심 포인트
 
-실시간 스트리밍 데이터에서 사기 거래를 탐지해야 하는 경우 Amazon Kinesis Data Streams와 Amazon Managed Service for Apache Flink의 RANDOM_CUT_FOREST 함수에서, 최소한의 운영 관리로 이상 점수를 실시간으로 할당할 수 있다.
+실시간 스트리밍 데이터에서 사기 거래를 탐지해야 하는 경우 Amazon Kinesis Data Streams와 Amazon Kinesis Data Analytics의 RANDOM_CUT_FOREST 함수에서, 최소한의 운영 관리로 이상 점수를 실시간으로 할당할 수 있다.
 
 ## 📝 설명
 
-### Amazon Managed Service for Apache Flink가 실시간 이상 탐지에 적합한 이유
+### Amazon Kinesis Data Analytics가 실시간 이상 탐지에 적합한 이유
 
-Amazon Managed Service for Apache Flink는 표준 SQL을 사용하여 스트리밍 데이터를 실시간으로 처리하고 분석할 수 있는 완전 관리형 서비스입니다. 내장된 RANDOM_CUT_FOREST 함수는 AWS가 제공하는 이상 탐지 알고리즘으로, 다른 레코드들과 거리가 먼 레코드를 자동으로 식별합니다. 
+Amazon Kinesis Data Analytics는 표준 SQL을 사용하여 스트리밍 데이터를 실시간으로 처리하고 분석할 수 있는 완전 관리형 서비스입니다. 내장된 RANDOM_CUT_FOREST 함수는 AWS가 제공하는 이상 탐지 알고리즘으로, 다른 레코드들과 거리가 먼 레코드를 자동으로 식별합니다. 
 
 이 알고리즘은 애플리케이션 시작 시점부터 현재 스트림의 레코드들을 사용하여 머신러닝 모델을 실시간으로 개발하며, 별도의 모델 훈련이나 배포 과정 없이 즉시 이상 점수를 제공합니다.
 
 ### 아키텍처 플로우
 
 ```
-거래 데이터 → Kinesis Data Streams → Apache Flink Studio
+거래 데이터 → Kinesis Data Streams → Kinesis Data Analytics
                                         ↓
                               RANDOM_CUT_FOREST 함수
                                         ↓
@@ -39,14 +39,14 @@ Amazon Managed Service for Apache Flink는 표준 SQL을 사용하여 스트리�
 
 ### Trade-offs 고려사항
 
-**Amazon Kinesis + Apache Flink 장점**:
+**Amazon Kinesis + Kinesis Data Analytics 장점**:
 - 완전 관리형 서비스로 운영 부담 최소화
 - SQL 기반의 직관적인 스트림 처리
 - 내장된 머신러닝 함수로 별도 모델 개발 불필요
 - 마이크로초 단위의 실시간 처리
 - 자동 스케일링으로 트래픽 변화에 유연 대응
 
-**Amazon Kinesis + Apache Flink 단점**:
+**Amazon Kinesis + Kinesis Data Analytics 단점**:
 - 복잡한 커스텀 알고리즘 구현에 제약
 - SQL 기반 처리로 고급 데이터 변환에 한계
 - 비용이 상대적으로 높을 수 있음
@@ -82,11 +82,11 @@ Amazon Managed Service for Apache Flink는 표준 SQL을 사용하여 스트리�
 **Options:**
 
 - A) Use Amazon Data Firehose to stream transaction data into Amazon S3. Use the Amazon SageMaker Random Cut Forest (RCF) to detect anomalies.
-- B) Use Amazon Kinesis Data Streams to stream transaction data and Amazon Managed Service for Apache Flink Studio's RANDOM_CUT_FOREST function to detect anomalies.
+- B) Use Amazon Kinesis Data Streams to stream transaction data and Amazon Kinesis Data Analytics RANDOM_CUT_FOREST function to detect anomalies.
 - C) Use Amazon Data Firehose to stream transaction data and Amazon Managed Service for Apache Flink Studio's HOTSPOTS function to detect anomalies.
 - D) Use Apache Spark Streaming in Amazon EMR to stream transaction data into Amazon S3. Use the Amazon SageMaker k-nearest neighbors (k-NN) to detect anomalies.
 
-**정답: B) Amazon Kinesis Data Streams + Apache Flink RANDOM_CUT_FOREST**
+**정답: B) Amazon Kinesis Data Streams + Kinesis Data Analytics RANDOM_CUT_FOREST**
 
 💡 추가 설명:
 
