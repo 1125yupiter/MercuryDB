@@ -1,5 +1,5 @@
 ---
-title: classification-svm-imbalanced-lowlatency
+title: classification-svm-imbalanced-lowlatency
 created: 2025-08-17
 modified: 2025-08-17
 tags:
