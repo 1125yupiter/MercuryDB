@@ -39,8 +39,8 @@ aliases: ["bayesian-model-selection", "correlation-based-modeling", "feature-ind
 상관계수 분포 분석
     ↓
 ┌─────────────────┐    ┌─────────────────┐
-│ 0 근처(-0.1~0.1) │    │ 넓은 범위 분포    │
-│ 독립성 가정 가능  │    │ 종속성 존재      │
+│ 0 근처(-0.1~0.1) │    │ 넓은 범위 분포     │
+│ 독립성 가정 가능    │    │ 종속성 존재        │
 └─────────────────┘    └─────────────────┘
     ↓                      ↓
 Naive Bayes           Full Bayesian Network
