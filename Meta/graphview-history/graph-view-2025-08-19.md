@@ -16,6 +16,7 @@ top_tag_pairs: ["problem/classification::service/sagemaker", "constraint/imbalan
 # 🧠 Neurons 네트워크 스냅샷 - 2025년 08월 19일
 
 ## 노트
+잘 진행 되고 있다. 
 
 ## 주요 지표 현황
 | 지표 | 값 | 의미 |
