@@ -12,7 +12,7 @@ aliases: ["object2vec-overfitting", "sentence-embedding-regularization", "sagema
 
 ---
 
-# Amazon SageMaker Object2Vec for Sentence Embedding Overfitting Mitigation
+# SageMaker Object2Vec 과적합 해결을 위한 Dropout 활용법
 
 ## 🎯 핵심 포인트
 
@@ -35,10 +35,10 @@ Amazon SageMaker Object2Vec는 문장 임베딩 생성에 적합한 딥러닝 �
 
 ```
 Input Sentences --> [Encoder: enc0, enc1] --> Embedding Vectors --> [Comparator: MLP] --> Relationship Score
-   |                       |                         |                    |
-   |                       |                         |                    |
- Preprocessing       Customizable Layers     Vector Assembly      Loss Function
- (Tokenization)       (Dropout, Layers)       (comparator_list)    (Compare with Labels)
+   |                     |                       |                  |
+   |                     |                       |                  |
+ Preprocessing     Customizable Layers   Vector Assembly    Loss Function
+ (Tokenization)     (Dropout, Layers)    (comparator_list)  (Compare with Labels)
 ```
 
 ### Trade-offs 고려사항

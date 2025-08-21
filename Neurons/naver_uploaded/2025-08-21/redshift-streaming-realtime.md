@@ -29,7 +29,7 @@ Amazon Redshift Streaming Ingestion은 스트리밍 데이터 소스와 Redshift
 
 ```
 GPS 디바이스 → Kinesis Data Streams → Redshift Streaming Ingestion → Redshift 클러스터 → 대시보드
-     ↓               ↓                        ↓                    ↓              ↓
+     ↓               ↓                ↓                  ↓              ↓
   실시간 위치       스트림 수집           직접 로딩           실시간 분석      운영 인사이트
 ```
 
