@@ -13,7 +13,7 @@ aliases: ["loss-oscillation", "learning-rate-tuning", "gradient-descent-issues"]
 
 ---
 
-# Neural Network Loss Function Oscillation - Learning Rate Optimization
+# 신경망 손실함수 진동 문제 해결 - 학습률 최적화 기법
 
 ## 🎯 핵심 포인트
 
