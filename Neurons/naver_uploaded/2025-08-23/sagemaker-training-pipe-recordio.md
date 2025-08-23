@@ -34,7 +34,7 @@ SageMaker의 대부분 알고리즘은 Protobuf RecordIO 형식에서 최고의 
 
 ```
 CSV 데이터 (S3) → Protobuf RecordIO 변환 → S3 저장
-                                              ↓
+                                             ↓
 Training Instance ←── Pipe Mode 스트리밍 ──── RecordIO 데이터
         ↓
 Linear Learner Algorithm ← 실시간 데이터 피드
