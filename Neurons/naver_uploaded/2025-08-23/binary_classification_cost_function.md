@@ -13,7 +13,7 @@ aliases: ["cost-function", "cost-sensitive-ml", "binary-cost"]
 
 ---
 
-# Binary Classification Cost Function Analysis
+# 이진 분류 비용 함수 분석 - 비즈니스 가치를 반영한 모델 선택
 
 ## 🎯 핵심 포인트
 
