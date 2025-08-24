@@ -38,9 +38,9 @@ aliases: ["imbalanced-classification", "recall-improvement", "medical-ml"]
     [데이터 전처리]
          ↓
 ┌─────────────────────┬─────────────────────┐
-│   SMOTE 오버샘플링    │  Cost-sensitive     │
-│   (데이터 균형 조정)   │  Learning 적용      │
-│                    │  (임계값/가중치 조정) │
+│   SMOTE 오버샘플링     │  Cost-sensitive     │
+│   (데이터 균형 조정)    │  Learning 적용       │
+│                     │  (임계값/가중치 조정).   │
 └─────────────────────┴─────────────────────┘
          ↓
     [모델 학습/예측]
