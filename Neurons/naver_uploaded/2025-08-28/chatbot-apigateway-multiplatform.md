@@ -34,9 +34,9 @@ REST API는 웹에서 데이터를 주고받는 표준화된 방식으로, HTTP 
 ```
 웹 애플리케이션 ──┐
 모바일 앱 ────────┼── API Gateway ── Lambda ── Amazon Lex
-메시징 플랫폼 ────┘     │                    │
-                      │                    └── DynamoDB (세션 저장)
-                      └── CloudWatch (모니터링)
+메시징 플랫폼 ────┘     │                     │
+                    │                     └── DynamoDB (세션 저장)
+                    └── CloudWatch (모니터링)
 ```
 
 ### Trade-offs 고려사항
