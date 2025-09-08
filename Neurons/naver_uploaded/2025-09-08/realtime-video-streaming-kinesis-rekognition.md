@@ -40,10 +40,10 @@ Amazon Kinesis Video Streams는 수백 대의 카메라에서 생성되는 연�
                                                               [Rekognition Video]
                                                                         │
                                                                         ▼
-                                                              [얼굴 컬렉션과 비교]
+                                                            [얼굴 컬렉션과 비교]
                                                                         │
                                                                         ▼
-                                                              [비직원 감지 시 알림]
+                                                           [비직원 감지 시 알림]
 ```
 
 ### Trade-offs 고려사항
